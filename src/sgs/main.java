@@ -1,4 +1,3 @@
-
 package sgs;
 import java.util.*;
 import java.sql.*;
@@ -11,6 +10,7 @@ public class main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String op = null;
+         
         do {
             System.out.println("===========================================");
             System.out.println("Welcome to Student Grading System");
@@ -29,6 +29,10 @@ public class main {
                     main demo = new main();
                     demo.addStudents();
                 break;
+                case 2:
+                    main demo1 = new main();
+                    demo1.viewStudents();
+                    
             }
             System.out.print("Do you want to continue?(Y/N): ");
             op = in.next();
@@ -42,7 +46,7 @@ public class main {
     public void addStudents(){
          Scanner sc = new Scanner(System.in);
          config conf = new config();
-          sc.nextLine();
+         
          System.out.print("Student First Name: ");
          String fname = sc.next();
          System.out.print("Student Last Name: ");
@@ -60,7 +64,14 @@ public class main {
                     + " VALUES (?, ?, ?, ?, ?, ?)";
          conf.addRecord(sql, fname, lname, email, status, program, section);
      }
-    
+    private void viewStudents() {
+        config conf = new config();
+        String votersQuery = "SELECT * FROM tbl_students";
+        String[] votersHeaders = {"ID", "First Name", "Last Name", "Email", "Status", "Program", "Section"};
+        String[] votersColumns = {"s_id", "s_fname", "s_lname", "s_email", "s_status", "s_program", "s_section"};
+        
+        conf.viewRecords(votersQuery, votersHeaders, votersColumns);
+    }
      
     
 }

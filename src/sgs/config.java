@@ -1,4 +1,3 @@
-
 package sgs;
 import java.sql.*;
 
@@ -33,9 +32,9 @@ public class config {
         }
     }
     
+      // Dynamic view method to display records from any table
     public void viewRecords(String sqlQuery, String[] columnHeaders, String[] columnNames) {
         // Check that columnHeaders and columnNames arrays are the same length
-        config con = new config();
         if (columnHeaders.length != columnNames.length) {
             System.out.println("Error: Mismatch between column headers and column names.");
             return;
