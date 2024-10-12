@@ -1,4 +1,4 @@
-package sgs;
+package system;
 import java.util.*;
 
 public class main {
@@ -9,7 +9,7 @@ public class main {
         
         do {
             System.out.println("===========================================");
-            System.out.println("    Welcome to Student Grading System");
+            System.out.println("    Welcome to Student Grading System ");
             System.out.println("===========================================");            
             System.out.println("|        1. ADD                            |");
             System.out.println("|        2. VIEW                           |");
