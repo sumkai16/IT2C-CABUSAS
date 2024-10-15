@@ -1,19 +1,19 @@
 
 package students;
-import package.system;
+import system.main;
 import java.util.Scanner;
 import system.config;
 
 
 public class smain {
-    public static void main(String[] args) {
+    public void students() {
         Scanner in = new Scanner(System.in);
         String op = null;
         studentsconf demo = new studentsconf();
         
         do {
             System.out.println("===========================================");
-            System.out.println("    Welcome to Student Grading System");
+            System.out.println("        STUDENTS      ");
             System.out.println("===========================================");            
             System.out.println("|        1. ADD                            |");
             System.out.println("|        2. VIEW                           |");
