@@ -2,7 +2,7 @@
 package students;
 import system.main;
 import java.util.Scanner;
-import system.config;
+
 
 
 public class smain {
@@ -10,6 +10,7 @@ public class smain {
         Scanner in = new Scanner(System.in);
         String op = null;
         studentsconf demo = new studentsconf();
+        main sys = new main();
         
         do {
             System.out.println("===========================================");
@@ -43,7 +44,7 @@ public class smain {
                     demo.deleteStudents();
                     break;
                 case 5:
-                     System.exit(0);
+                    sys.main(new String[]{});
                     break;
                     
             }

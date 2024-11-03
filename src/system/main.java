@@ -2,14 +2,17 @@ package system;
 import java.util.*;
 import students.smain;
 import teachers.tmain;
-
+import courses.cmain;
+import grades.gmain;
 
 public class main {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(   System.in);
         String op = null;
         smain stud = new smain();
         tmain teach = new tmain();
+        cmain cour = new cmain();
+        gmain grade = new gmain();
         do {
             System.out.println("===========================================");
             System.out.println("|    Welcome to Student Grading System    |");
@@ -17,7 +20,7 @@ public class main {
             System.out.println("|        1. STUDENT                        |");
             System.out.println("|        2. TEACHER                        |");
             System.out.println("|        3. COURSES                        |");
-            System.out.println("|        4. REPORTS                        |");
+            System.out.println("|        4. GRADES                         |");
             System.out.println("|        5. EXIT                           |");
             System.out.println("===========================================");
             System.out.print("Enter Action (1-5 only): ");
@@ -35,22 +38,18 @@ public class main {
                   teach.teachers();
                 break;
                 case 3: 
-                    
+                    cour.courses();
                 break;
                 case 4:
-                   
-                    
+                   grade.grades();
+                break;
                 case 5:
+                    System.out.println("Exiting...");
+                    System.out.println("Thank you, See you soon!");
                      System.exit(0);
                     break;
                     
-            }
-            
-            
-            
-            
-            
-            
+            }          
             System.out.print("Do you want to continue?(Y/N): ");
             op = in.next();
         }while(op.equals("Y") || op.equals("y"));

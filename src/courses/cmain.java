@@ -1,20 +1,17 @@
 
-package teachers;
-
+package courses;
 import java.util.Scanner;
 import system.main;
 
-
-public class tmain {
-     public void teachers() {
+public class cmain {
+    public void courses() {
         Scanner in = new Scanner(System.in);
         String op = null;
-        tconf teach = new tconf();
-        main sys = new main();
-        
+        cconf course = new cconf();
+        main sys = new main ();
         do {
             System.out.println("===========================================");
-            System.out.println("          TEACHERS      ");
+            System.out.println("          COURSES      ");
             System.out.println("===========================================");            
             System.out.println("|        1. ADD                            |");
             System.out.println("|        2. VIEW                           |");
@@ -30,18 +27,17 @@ public class tmain {
             }
             switch(action){
                 case 1:
-                    teach.addTeachers();
+                    course.addCourses();
                 break;
                 case 2:
-                   teach.viewTeachers();
+                    course.viewCourses();
                 break;
                 case 3: 
-                   teach.viewTeachers();
-                   teach.updateTeachers();
+                     course.viewCourses();
                 break;
                 case 4:
-                    teach.viewTeachers();
-                    teach.deleteTeachers();
+                    course.viewCourses();
+                    
                     break;
                 case 5:
                     sys.main(new String[]{});
@@ -53,6 +49,4 @@ public class tmain {
         }while(op.equals("Y") || op.equals("y"));
         System.out.println("Thank You, See you soon!");
     }
-     
-     
 }

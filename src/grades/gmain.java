@@ -1,20 +1,21 @@
 
-package teachers;
+package grades;
 
 import java.util.Scanner;
 import system.main;
 
 
-public class tmain {
-     public void teachers() {
+public class gmain {
+    
+    public void grades() {
         Scanner in = new Scanner(System.in);
         String op = null;
-        tconf teach = new tconf();
         main sys = new main();
+        gconf grades = new gconf();
         
         do {
             System.out.println("===========================================");
-            System.out.println("          TEACHERS      ");
+            System.out.println("        GRADES      ");
             System.out.println("===========================================");            
             System.out.println("|        1. ADD                            |");
             System.out.println("|        2. VIEW                           |");
@@ -30,18 +31,18 @@ public class tmain {
             }
             switch(action){
                 case 1:
-                    teach.addTeachers();
+                   grades.addGrade();
                 break;
                 case 2:
-                   teach.viewTeachers();
+                    grades.viewGrades();
                 break;
                 case 3: 
-                   teach.viewTeachers();
-                   teach.updateTeachers();
+                    grades.viewGrades();
+                    grades.updateGrade();
                 break;
                 case 4:
-                    teach.viewTeachers();
-                    teach.deleteTeachers();
+                    grades.viewGrades();
+                    grades.deleteGrade();
                     break;
                 case 5:
                     sys.main(new String[]{});
@@ -52,7 +53,7 @@ public class tmain {
             op = in.next();
         }while(op.equals("Y") || op.equals("y"));
         System.out.println("Thank You, See you soon!");
+        
+  
     }
-     
-     
 }
