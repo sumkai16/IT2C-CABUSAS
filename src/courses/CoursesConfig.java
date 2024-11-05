@@ -38,12 +38,13 @@ public class CoursesConfig {
     
     public void viewCourses() {
         
-        String coursesQuery = "SELECT c_id, c_code, t.t_lname, c_credits"
+            String coursesQuery = "SELECT c_id, c_code, t.t_lname, c_credits "
                 + "FROM tbl_courses "
-                + "INNER JOIN tbl_teacher t ON tbl_courses.c_id = c.c_id";
+                + "INNER JOIN tbl_teachers t ON tbl_courses.t_id = t.t_id";
         String[] coursesHeaders = {"Course ID", "Course Code", "Teacher Assigned", "Credits"};
-        String[] coursesColumns = {"c_id", "c_code", "t_id", "c_credits"};       
+        String[] coursesColumns = {"c_id", "c_code", "t_lname", "c_credits"};       
         conf.viewRecords(coursesQuery, coursesHeaders, coursesColumns);
+
     }
 
     public void updateCourses() {
