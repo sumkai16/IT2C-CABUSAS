@@ -2,13 +2,13 @@ package courses;
 
 import java.util.Scanner;
 import system.config;
-import teachers.tconf;
+import teachers.TeacherConfig;
 
-public class cconf {
+public class CoursesConfig {
         Scanner in = new Scanner(System.in);
         config conf = new config();
     public void addCourses() {
-        tconf teach = new tconf();
+        TeacherConfig teach = new TeacherConfig();
         String op = null;
         System.out.print("Course Code: ");
         Scanner sc = new Scanner(System.in);
@@ -38,16 +38,16 @@ public class cconf {
     
     public void viewCourses() {
         
-        String coursesQuery = "SELECT * FROM tbl_courses";
-        String[] coursesHeaders = {"Course ID", "Course Code", "Course Description","Teacher Assigned", "Credits"};
-        String[] coursesColumns = {"c_id", "c_code", "c_description","t_id", "c_credits"};
-        
+        String coursesQuery = "SELECT c_id, c_code, t.t_lname, c_credits"
+                + "FROM tbl_courses "
+                + "INNER JOIN tbl_teacher t ON tbl_courses.c_id = c.c_id";
+        String[] coursesHeaders = {"Course ID", "Course Code", "Teacher Assigned", "Credits"};
+        String[] coursesColumns = {"c_id", "c_code", "t_id", "c_credits"};       
         conf.viewRecords(coursesQuery, coursesHeaders, coursesColumns);
     }
 
     public void updateCourses() {
-        
-        
+           
         System.out.print("Enter Course ID to update: ");
         int courseId = in.nextInt();
 

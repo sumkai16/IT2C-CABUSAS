@@ -6,7 +6,7 @@ import java.util.Scanner;
 import system.config;
 import system.main;
 
-public class tconf {
+public class TeacherConfig {
     private Scanner sc = new Scanner(System.in);
     private config conf = new config();
     private main sys = new main();

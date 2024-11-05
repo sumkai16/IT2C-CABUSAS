@@ -6,7 +6,7 @@ import java.util.Scanner;
 import system.config;
 import system.main;
 
-public class studentsconf {
+public class StudentsConfig {
      Scanner sc = new Scanner(System.in);
      config conf = new config();
      main sys = new main();

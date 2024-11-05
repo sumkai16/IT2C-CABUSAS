@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 
 
-public class smain {
+public class StudentMain {
     public void students() {
         Scanner in = new Scanner(System.in);
         String op = null;
-        studentsconf demo = new studentsconf();
+        StudentsConfig demo = new StudentsConfig();
         main sys = new main();
         
         do {

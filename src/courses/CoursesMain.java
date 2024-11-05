@@ -3,11 +3,11 @@ package courses;
 import java.util.Scanner;
 import system.main;
 
-public class cmain {
+public class CoursesMain {
     public void courses() {
         Scanner in = new Scanner(System.in);
         String op = null;
-        cconf course = new cconf();
+        CoursesConfig course = new CoursesConfig();
         main sys = new main ();
         do {
             System.out.println("===========================================");

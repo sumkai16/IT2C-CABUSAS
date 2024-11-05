@@ -35,6 +35,7 @@ public class gmain {
                 break;
                 case 2:
                     grades.viewGrades();
+                    
                 break;
                 case 3: 
                     grades.viewGrades();

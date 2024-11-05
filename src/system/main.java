@@ -1,17 +1,17 @@
 package system;
 import java.util.*;
-import students.smain;
-import teachers.tmain;
-import courses.cmain;
+import students.StudentMain;
+import teachers.TeacherMain;
+import courses.CoursesMain;
 import grades.gmain;
 
 public class main {
     public static void main(String[] args) {
         Scanner in = new Scanner(   System.in);
         String op = null;
-        smain stud = new smain();
-        tmain teach = new tmain();
-        cmain cour = new cmain();
+        StudentMain stud = new StudentMain();
+        TeacherMain teach = new TeacherMain();
+        CoursesMain cour = new CoursesMain();
         gmain grade = new gmain();
         do {
             System.out.println("===========================================");
