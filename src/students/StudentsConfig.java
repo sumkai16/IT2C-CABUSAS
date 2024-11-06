@@ -14,29 +14,32 @@ public class StudentsConfig {
 
     public void addStudents() {
         System.out.print("Student First Name: ");
-        String fname = sc.next();
+        Scanner sc = new Scanner(System.in);
+        String fname = sc.nextLine();
         System.out.print("Student Last Name: ");
-        String lname = sc.next();
+        String lname = sc.nextLine();
         System.out.print("Student Email: ");
-        String email = sc.next();
+        String email = sc.nextLine();
         System.out.print("Student Status: ");
-        String status = sc.next();
+        String status = sc.nextLine();
         System.out.print("Student Program: ");
-        String program = sc.next();
+        String program = sc.nextLine();
         System.out.print("Student Section: ");
-        String section = sc.next();
-
-        String sql = "INSERT INTO tbl_students (s_fname, s_lname, s_email, s_status, s_program, s_section) VALUES (?, ?, ?, ?, ?, ?)";
-        conf.addRecord(sql, fname, lname, email, status, program, section);
+        String section = sc.nextLine();
+        System.out.print("Student Section: ");
+        String year = sc.nextLine();
+        String sql = "INSERT INTO tbl_students (s_fname, s_lname, s_email, s_status, s_program, s_section) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        conf.addRecord(sql, fname, lname, email, status, program, section, year);
     }
 
     public void viewStudents() {
         String query =      "SELECT * FROM tbl_students";
-        String[] headers =  {"ID", "First Name", "Last Name", "Program", "Section"};
-        String[] columns =  {"s_id", "s_fname", "s_lname", "s_program", "s_section"};
+        String[] headers =  {"ID", "First Name", "Last Name", "Program", "Year Level", "Section"};
+        String[] columns =  {"s_id", "s_fname", "s_lname", "s_program", "s_year","s_section" };
         conf.viewRecords(query, headers, columns);
         
         System.out.println("1. Add Student\t\t4. View Full Information\n2. Update Student\t5. Back\n3. Delete Student");
+        System.out.print("Enter Choice: ");
         op = sc.nextInt();
         switch(op) {
             case 1: addStudents(); break;
@@ -60,8 +63,8 @@ public class StudentsConfig {
     public void updateStudents() {
         System.out.print("Enter ID to update: ");
         int studentId = sc.nextInt();
-        System.out.println("1. First Name\n2. Last Name\n3. Email\n4. Status\n5. Program\n6. Section");
-        System.out.print("Choose (1-6): ");
+        System.out.println("1. Email\n2. Status\n3. Program\n4. Year\n5. Section");
+        System.out.print("Choose (1-7): ");
         int choice = sc.nextInt();
         
         System.out.print("Enter New Value: ");
@@ -79,12 +82,11 @@ public class StudentsConfig {
 
     private String getColumnName(int choice) {
         switch (choice) {
-            case 1: return "s_fname";
-            case 2: return "s_lname";
-            case 3: return "s_email";
-            case 4: return "s_status";
-            case 5: return "s_program";
-            case 6: return "s_section";
+            case 1: return "s_email";
+            case 2: return "s_status";
+            case 3: return "s_program";
+            case 4: return "s_year";
+            case 5: return "s_section";
             default: return "";
         }
     }

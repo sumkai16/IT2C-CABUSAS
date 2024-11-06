@@ -10,40 +10,20 @@ public class config {
         try {
             Class.forName("org.sqlite.JDBC"); // Load the SQLite JDBC driver
             con = DriverManager.getConnection("jdbc:sqlite:axci.db"); // Establish connection
-            
         } catch (Exception e) {
             System.out.println("Connection Failed: " + e.getMessage());
         }
         return con;
-    } 
-    
-    // Add a record with dynamic values
+    }
+
+    //-----------------------------------------------
+    // ADD, UPDATE, DELETE Records Methods
+    //-----------------------------------------------
     public void addRecord(String sql, Object... values) {
         try (Connection conn = connectDB();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            for (int i = 0; i < values.length; i++) {
-                if (values[i] instanceof Integer) {
-                    pstmt.setInt(i + 1, (Integer) values[i]);
-                } else if (values[i] instanceof Double) {
-                    pstmt.setDouble(i + 1, (Double) values[i]);
-                } else if (values[i] instanceof Float) {
-                    pstmt.setFloat(i + 1, (Float) values[i]);
-                } else if (values[i] instanceof Long) {
-                    pstmt.setLong(i + 1, (Long) values[i]);
-                } else if (values[i] instanceof Boolean) {
-                    pstmt.setBoolean(i + 1, (Boolean) values[i]);
-                } else if (values[i] instanceof java.util.Date) {
-                    pstmt.setDate(i + 1, new java.sql.Date(((java.util.Date) values[i]).getTime()));
-                } else if (values[i] instanceof java.sql.Date) {
-                    pstmt.setDate(i + 1, (java.sql.Date) values[i]);
-                } else if (values[i] instanceof java.sql.Timestamp) {
-                    pstmt.setTimestamp(i + 1, (java.sql.Timestamp) values[i]);
-                } else {
-                    pstmt.setString(i + 1, values[i].toString());
-                }
-            }
-
+            setPreparedStatementValues(pstmt, values);
             pstmt.executeUpdate();
             System.out.println("Record added successfully!");
         } catch (SQLException e) {
@@ -51,7 +31,35 @@ public class config {
         }
     }
     
-    // Dynamic method to view records from any table
+    public void updateRecord(String sql, Object... values) {
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            setPreparedStatementValues(pstmt, values);
+            pstmt.executeUpdate();
+            System.out.println("Record updated successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error updating record: " + e.getMessage());
+        }
+    }
+
+    public void deleteRecord(String sql, Object... values) {
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            setPreparedStatementValues(pstmt, values);
+            pstmt.executeUpdate();
+            System.out.println("Record deleted successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error deleting record: " + e.getMessage());
+        }
+    }
+
+    //-----------------------------------------------
+    // VIEW RECORDS METHODS (WITHOUT AND WITH PARAMS)
+    //-----------------------------------------------
+
+    // Method to view records without parameters
     public void viewRecords(String sqlQuery, String[] columnHeaders, String[] columnNames) {
         if (columnHeaders.length != columnNames.length) {
             System.out.println("Error: Mismatch between column headers and column names.");
@@ -63,21 +71,11 @@ public class config {
              ResultSet rs = pstmt.executeQuery()) {
 
             // Print headers
-            StringBuilder headerLine = new StringBuilder("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n| ");
-            for (String header : columnHeaders) {
-                headerLine.append(String.format("%-20s | ", header));
-            }
-            headerLine.append("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.println(headerLine);
+            printTableHeaders(columnHeaders);
 
             // Print rows
             while (rs.next()) {
-                StringBuilder row = new StringBuilder("| ");
-                for (String colName : columnNames) {
-                    String value = rs.getString(colName);
-                    row.append(String.format("%-20s | ", value != null ? value : ""));
-                }
-                System.out.println(row);
+                printTableRow(rs, columnNames);
             }
             System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
@@ -86,60 +84,56 @@ public class config {
         }
     }
 
-    // Update a record with dynamic values
-    public void updateRecord(String sql, Object... values) {
-        try (Connection conn = connectDB();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    // Method to view records with parameters (parameterized queries)
+    public void viewRecordsWithParams(String sqlQuery, String[] columnHeaders, String[] columnNames, Object... params) {
+        if (columnHeaders.length != columnNames.length) {
+            System.out.println("Error: Mismatch between column headers and column names.");
+            return;
+        }
 
-            for (int i = 0; i < values.length; i++) {
-                if (values[i] instanceof Integer) {
-                    pstmt.setInt(i + 1, (Integer) values[i]);
-                } else if (values[i] instanceof Double) {
-                    pstmt.setDouble(i + 1, (Double) values[i]);
-                } else if (values[i] instanceof Float) {
-                    pstmt.setFloat(i + 1, (Float) values[i]);
-                } else if (values[i] instanceof Long) {
-                    pstmt.setLong(i + 1, (Long) values[i]);
-                } else if (values[i] instanceof Boolean) {
-                    pstmt.setBoolean(i + 1, (Boolean) values[i]);
-                } else if (values[i] instanceof java.util.Date) {
-                    pstmt.setDate(i + 1, new java.sql.Date(((java.util.Date) values[i]).getTime()));
-                } else if (values[i] instanceof java.sql.Date) {
-                    pstmt.setDate(i + 1, (java.sql.Date) values[i]);
-                } else if (values[i] instanceof java.sql.Timestamp) {
-                    pstmt.setTimestamp(i + 1, (java.sql.Timestamp) values[i]);
-                } else {
-                    pstmt.setString(i + 1, values[i].toString());
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sqlQuery)) {
+
+            // Set dynamic parameters
+            setPreparedStatementValues(pstmt, params);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                // Print headers
+                printTableHeaders(columnHeaders);
+
+                // Print rows
+                while (rs.next()) {
+                    printTableRow(rs, columnNames);
                 }
+                System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------");
             }
 
-            pstmt.executeUpdate();
-            System.out.println("Record updated successfully!");
         } catch (SQLException e) {
-            System.out.println("Error updating record: " + e.getMessage());
+            System.out.println("Error retrieving records with params: " + e.getMessage());
         }
     }
-    
-    // Delete a record with dynamic values
-    public void deleteRecord(String sql, Object... values) {
-        try (Connection conn = connectDB();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            for (int i = 0; i < values.length; i++) {
-                if (values[i] instanceof Integer) {
-                    pstmt.setInt(i + 1, (Integer) values[i]);
-                } else {
-                    pstmt.setString(i + 1, values[i].toString());
-                }
-            }
-
-            pstmt.executeUpdate();
-            System.out.println("Record deleted successfully!");
-        } catch (SQLException e) {
-            System.out.println("Error deleting record: " + e.getMessage());
+    //-----------------------------------------------
+    // Helper Methods for Table Formatting
+    //-----------------------------------------------
+    private void printTableHeaders(String[] columnHeaders) {
+        StringBuilder headerLine = new StringBuilder("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n| ");
+        for (String header : columnHeaders) {
+            headerLine.append(String.format("%-20s | ", header));
         }
+        headerLine.append("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println(headerLine);
     }
-    
+
+    private void printTableRow(ResultSet rs, String[] columnNames) throws SQLException {
+        StringBuilder row = new StringBuilder("| ");
+        for (String colName : columnNames) {
+            String value = rs.getString(colName);
+            row.append(String.format("%-20s | ", value != null ? value : ""));
+        }
+        System.out.println(row);
+    }
+
     //-----------------------------------------------
     // Helper Method for Setting PreparedStatement Values
     //-----------------------------------------------
@@ -167,10 +161,9 @@ public class config {
         }
     }
 
-  //-----------------------------------------------
+    //-----------------------------------------------
     // GET SINGLE VALUE METHOD
     //-----------------------------------------------
-
     public double getSingleValue(String sql, Object... params) {
         double result = 0.0;
         try (Connection conn = connectDB();
