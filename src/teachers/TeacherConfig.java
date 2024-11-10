@@ -19,7 +19,7 @@ public class TeacherConfig {
         String lname = sc.next();
         System.out.print("Teacher Sex: ");
         String sex = sc.next();
-        System.out.print("Teacher Date of Birth (MM/DD/YY): ");
+        System.out.print("Teacher Date of Birth (YYYY-MM-DD): ");
         String dob = sc.next();
         System.out.print("Teacher Department: ");
         String department = sc.next();

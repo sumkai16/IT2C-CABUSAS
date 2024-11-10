@@ -34,6 +34,7 @@ public class StudentMain {
                 break;
                 case 2:
                     demo.viewStudents();
+                    demo.wantUpdate();
                 break;
                 case 3: 
                     demo.viewStudents();

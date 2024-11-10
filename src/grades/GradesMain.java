@@ -5,13 +5,13 @@ import java.util.Scanner;
 import system.main;
 
 
-public class gmain {
+public class GradesMain {
     
     public void grades() {
         Scanner in = new Scanner(System.in);
         String op = null;
         main sys = new main();
-        gconf grades = new gconf();
+        GradesConfig grades = new GradesConfig();
         
         do {
             System.out.println("===========================================");

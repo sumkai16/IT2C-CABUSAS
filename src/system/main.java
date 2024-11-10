@@ -3,7 +3,7 @@ import java.util.*;
 import students.StudentMain;
 import teachers.TeacherMain;
 import courses.CoursesMain;
-import grades.gmain;
+import grades.GradesMain;
 
 public class main {
     public static void main(String[] args) {
@@ -12,14 +12,14 @@ public class main {
         StudentMain stud = new StudentMain();
         TeacherMain teach = new TeacherMain();
         CoursesMain cour = new CoursesMain();
-        gmain grade = new gmain();
+        GradesMain grade = new GradesMain();
         do {
             System.out.println("===========================================");
             System.out.println("|    Welcome to Student Grading System    |");
             System.out.println("===========================================");            
             System.out.println("|        1. STUDENT                        |");
-            System.out.println("|        2. TEACHER                        |");
-            System.out.println("|        3. COURSES                        |");
+            System.out.println("|        2. COURSES                        |");
+            System.out.println("|        3. TEACHER                        |");
             System.out.println("|        4. GRADES                         |");
             System.out.println("|        5. EXIT                           |");
             System.out.println("===========================================");
@@ -35,10 +35,10 @@ public class main {
                     stud.students();
                 break;
                 case 2:
-                  teach.teachers();
+                  cour.courses();
                 break;
                 case 3: 
-                    cour.courses();
+                    teach.teachers();
                 break;
                 case 4:
                    grade.grades();

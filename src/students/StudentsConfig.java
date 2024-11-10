@@ -36,28 +36,7 @@ public class StudentsConfig {
         String query =      "SELECT * FROM tbl_students";
         String[] headers =  {"ID", "First Name", "Last Name", "Program", "Year Level", "Section"};
         String[] columns =  {"s_id", "s_fname", "s_lname", "s_program", "s_year","s_section" };
-        conf.viewRecords(query, headers, columns);
-        
-        System.out.println("1. Add Student\t\t4. View Full Information\n2. Update Student\t5. Back\n3. Delete Student");
-        System.out.print("Enter Choice: ");
-        op = sc.nextInt();
-        switch(op) {
-            case 1: addStudents(); break;
-            case 2: updateStudents(); break;
-            case 3: deleteStudents(); break;
-            case 4: {
-                System.out.print("Enter Student ID for full information: ");
-                int userId = sc.nextInt();
-                try {
-                    viewUserInfo(userId);
-                } catch (IOException e) {
-                    System.out.println("Error viewing user information: " + e.getMessage());
-                }
-                break;
-            }
-            case 5: sys.main(new String[]{});
-            default: System.out.println("Invalid option. Please try again."); break;
-        }
+        conf.viewRecords(query, headers, columns);     
     }
 
     public void updateStudents() {
@@ -118,5 +97,35 @@ public class StudentsConfig {
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+    
+    public void wantUpdate(){
+        System.out.print("Do you want to update?(yes/no): ");
+        String up = null;
+        up = sc.next();
+        do{
+            System.out.println("1. Add Student\t\t4. View Full Information\n2. Update Student\t5. Back\n3. Delete Student");
+            System.out.print("Enter Choice: ");
+            op = sc.nextInt();
+            switch(op) {
+                case 1: addStudents(); break;
+                case 2: updateStudents(); break;
+                case 3: deleteStudents(); break;
+                case 4: {
+                    System.out.print("Enter Student ID for full information: ");
+                    int userId = sc.nextInt();
+                    try {
+                        viewUserInfo(userId);
+                    } catch (IOException e) {
+                        System.out.println("Error viewing user information: " + e.getMessage());
+                    }
+                    break;
+                }
+                case 5: sys.main(new String[]{});
+                default: System.out.println("Invalid option. Please try again."); break;
+            }
+        }while(up.equals("Yes") || up.equals("yes"));
+
+        
     }
 }
