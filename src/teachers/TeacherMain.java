@@ -1,12 +1,13 @@
 
 package teachers;
 
+import java.io.IOException;
 import java.util.Scanner;
 import system.main;
 
 
 public class TeacherMain {
-     public void teachers() {
+     public void teachers() throws IOException {
         Scanner in = new Scanner(System.in);
         String op = null;
         TeacherConfig teach = new TeacherConfig();
@@ -16,11 +17,11 @@ public class TeacherMain {
             System.out.println("===========================================");
             System.out.println("          TEACHERS      ");
             System.out.println("===========================================");            
-            System.out.println("|        1. ADD                            |");
-            System.out.println("|        2. VIEW                           |");
-            System.out.println("|        3. UPDATE                         |");
-            System.out.println("|        4. DELETE                         |");
-            System.out.println("|        5. EXIT                           |");
+            System.out.println("        1. ADD                            ");
+            System.out.println("        2. VIEW                           ");
+            System.out.println("        3. UPDATE                         ");
+            System.out.println("        4. DELETE                         ");
+            System.out.println("        5. BACK TO MAIN                   ");
             System.out.println("===========================================");
             System.out.print("Enter Action (1-5 only): ");
             int action = in.nextInt();
@@ -37,10 +38,10 @@ public class TeacherMain {
                 break;
                 case 3: 
                    teach.viewTeachers();
+                   teach.selections();
                    teach.updateTeachers();
                 break;
                 case 4:
-                    teach.viewTeachers();
                     teach.deleteTeachers();
                     break;
                 case 5:
@@ -48,7 +49,7 @@ public class TeacherMain {
                     break;
                     
             }
-            System.out.print("Do you want to continue?(Y/N): ");
+            System.out.print("Do you want to go back to Teachers Menu?(Y/N): ");
             op = in.next();
         }while(op.equals("Y") || op.equals("y"));
         System.out.println("Thank You, See you soon!");

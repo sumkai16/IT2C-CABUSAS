@@ -3,16 +3,23 @@ import java.util.*;
 import students.StudentMain;
 import teachers.TeacherMain;
 import courses.CoursesMain;
-import grades.GradesMain;
+import courses.CoursesConfig;
+import courses.GradesC;
+import java.io.IOException;
+import courses.addGrades;
 
 public class main {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(   System.in);
+    
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(System.in);
         String op = null;
         StudentMain stud = new StudentMain();
         TeacherMain teach = new TeacherMain();
         CoursesMain cour = new CoursesMain();
-        GradesMain grade = new GradesMain();
+        addGrades ad = new addGrades();
+        CoursesConfig c = new CoursesConfig();
+        GradesC gc = new GradesC();
+        
         do {
             System.out.println("===========================================");
             System.out.println("|    Welcome to Student Grading System    |");
@@ -24,38 +31,50 @@ public class main {
             System.out.println("|        5. EXIT                           |");
             System.out.println("===========================================");
             System.out.print("Enter Action (1-5 only): ");
-            int action = in.nextInt();
-            while (action>5 || action<0){
-               System.out.print("Error, Enter Action Again (1-5 only): ");
-                 action = in.nextInt(); 
-            }
             
-             switch(action){
+            int action = -1;
+            // Input validation for action
+            while (action < 1 || action > 5) {
+                try {
+                    action = in.nextInt();
+                    in.nextLine();  // Clear the buffer
+                    if (action < 1 || action > 5) {
+                        System.out.println("Invalid choice. Please enter a number between 1 and 5.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Error: Invalid input. Please enter a valid number between 1 and 5.");
+                    System.out.print(": ");
+                    in.nextLine();  // Clear the invalid input from the buffer
+                }
+            }
+
+            // Perform the chosen action
+            switch(action) {
                 case 1:
                     stud.students();
-                break;
+                    break;
                 case 2:
-                  cour.courses();
-                break;
+                    cour.courses();
+                    break;
                 case 3: 
                     teach.teachers();
-                break;
+                    break;
                 case 4:
-                   grade.grades();
-                break;
+                    c.viewCourses();
+                    gc.Grades();
+                    break;
                 case 5:
                     System.out.println("Exiting...");
                     System.out.println("Thank you, See you soon!");
-                     System.exit(0);
+                    System.exit(0);
                     break;
-                    
-            }          
-            System.out.print("Do you want to continue?(Y/N): ");
-            op = in.next();
-        }while(op.equals("Y") || op.equals("y"));
-         System.out.println("Thank You, See you soon!");
+            }
+            
+            // Ask if the user wants to continue
+            System.out.print("Do you want to continue? (Y/N): ");
+            op = in.nextLine();  // Use nextLine() to clear the buffer after integer input
+        } while(op.equalsIgnoreCase("Y"));
+        
+        System.out.println("Thank You, See you soon!");
     }
-
-    
-    
 }

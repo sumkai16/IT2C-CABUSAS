@@ -1,12 +1,11 @@
-
 package students;
-import system.main;
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
-
-
+import system.main;
 
 public class StudentMain {
-    public void students() {
+    public void students() throws IOException {
         Scanner in = new Scanner(System.in);
         String op = null;
         StudentsConfig demo = new StudentsConfig();
@@ -16,49 +15,63 @@ public class StudentMain {
             System.out.println("===========================================");
             System.out.println("        STUDENTS      ");
             System.out.println("===========================================");            
-            System.out.println("|        1. ADD                            |");
-            System.out.println("|        2. VIEW                           |");
-            System.out.println("|        3. UPDATE                         |");
-            System.out.println("|        4. DELETE                         |");
-            System.out.println("|        5. EXIT                           |");
+            System.out.println("        1. ADD                            ");
+            System.out.println("        2. VIEW                           ");
+            System.out.println("        3. UPDATE                         ");
+            System.out.println("        4. DELETE                         ");
+            System.out.println("        5. BACK TO MAIN                   ");
             System.out.println("===========================================");
-            System.out.print("Enter Action (1-5 only): ");
-            int action = in.nextInt();
-            while (action>5 || action<0){
-               System.out.print("Error, Enter Action Again (1-5 only): ");
-                 action = in.nextInt(); 
-            }
+            
+            int action = getValidActionInput(in);
+
             switch(action){
                 case 1:
                     demo.addStudents();
-                break;
+                    break;
                 case 2:
                     demo.viewStudents();
                     demo.wantUpdate();
-                break;
+                    break;
                 case 3: 
                     demo.viewStudents();
                     demo.updateStudents();
-                break;
+                    break;
                 case 4:
                     demo.viewStudents();
                     demo.deleteStudents();
                     break;
                 case 5:
-                    sys.main(new String[]{});
-                    break;
-                    
+                    sys.main(new String[]{}); 
+                    break;    
             }
-            System.out.print("Do you want to continue?(Y/N): ");
+            
+            System.out.print("Do you want to go back to Students Menu? (Y/N): ");
             op = in.next();
-        }while(op.equals("Y") || op.equals("y"));
-        System.out.println("Thank You, See you soon!");
+        } while(op.equalsIgnoreCase("Y"));
         
-  
+        System.out.println("Thank You, See you soon!");
     }
     
-    
-    
+    private int getValidActionInput(Scanner in) {
+        int action = -1;
+        boolean valid = false;
+        
+        while (!valid) {
+            try {
+                System.out.print("Enter Action (1-5 only): ");
+                action = in.nextInt();
+                if (action < 1 || action > 5) {
+                    throw new IllegalArgumentException("Error: Action must be between 1 and 5.");
+                }
+                valid = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number between 1 and 5.");
+                System.out.print(": ");
+                in.nextLine(); 
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return action;
+    }
 }
-
-

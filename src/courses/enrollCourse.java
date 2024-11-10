@@ -1,5 +1,6 @@
 package courses;
 
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import system.config;
@@ -11,50 +12,72 @@ public class enrollCourse {
 
     public void enrollStudentInCourses() {
         try {
-            int courseId = 0;
             System.out.print("Enter Student ID to enroll: ");
             int studentId = in.nextInt();
-            in.nextLine(); // Clear buffer after integer input
+            in.nextLine();
             
-            cr.viewCourses(); // Display available courses to the user
+            if (!isStudentIdValid(studentId)) {
+                System.out.println("Student ID does not exist. Enrollment failed.");
+                return;
+            }
+
+            cr.viewCourses();
             System.out.print("Enter Course IDs to enroll in (separated by commas): ");
             String courseIdsInput = in.nextLine();
-            
-            // Split the input by commas and trim any whitespace
             String[] courseIdsArray = courseIdsInput.split(",");
-            
-            // Prepare the SQL statement for batch insert
+            HashSet<Integer> courseIds = new HashSet<>();
+
             String enrollSql = "INSERT INTO tbl_student_courses (student_id, course_id) VALUES (?, ?)";
-            
+
             for (String courseIdStr : courseIdsArray) {
+                int courseId;
                 
                 try {
                     courseId = Integer.parseInt(courseIdStr.trim());
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid course ID: " + courseIdStr.trim());
-                    continue; // Skip invalid course ID and move to the next
-                }
-                
-                // Check if the student is already enrolled in the course
-                if (isStudentEnrolledInCourse(studentId, courseId)) {
-                    System.out.println("Student is already enrolled in course ID: " + courseId);
+                    System.out.println("Invalid course ID: " + courseIdStr.trim() + " (not a number). Skipping.");
                     continue;
                 }
-                
-                // Enroll the student in the course
+
+                if (!courseIds.add(courseId)) {
+                    System.out.println("Duplicate course ID: " + courseId + " in input. Skipping.");
+                    continue;
+                }
+
+                if (!isCourseIdValid(courseId)) {
+                    System.out.println("Course ID " + courseId + " does not exist. Skipping.");
+                    continue;
+                }
+
+                if (isStudentEnrolledInCourse(studentId, courseId)) {
+                    System.out.println("Student is already enrolled in course ID: " + courseId + ". Skipping.");
+                    continue;
+                }
+
                 conf.addRecord(enrollSql, studentId, courseId);
+                System.out.println("Student successfully enrolled in course ID: " + courseId);
             }
-             System.out.println("Student enrolled in course ID: " + courseId + " successfully.");
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter valid numbers for Student ID and Course IDs.");
-            in.nextLine(); // Clear scanner buffer
+            in.nextLine();
         }
     }
 
-    // Helper method to check if a student is already enrolled in a specific course
     private boolean isStudentEnrolledInCourse(int studentId, int courseId) {
         String checkEnrollmentSql = "SELECT COUNT(*) FROM tbl_student_courses WHERE student_id = ? AND course_id = ?";
         int count = (int) conf.getSingleValue(checkEnrollmentSql, studentId, courseId);
+        return count > 0;
+    }
+
+    private boolean isStudentIdValid(int studentId) {
+        String studentCheckSql = "SELECT COUNT(*) FROM tbl_students WHERE s_id = ?";
+        int count = (int) conf.getSingleValue(studentCheckSql, studentId);
+        return count > 0;
+    }
+
+    private boolean isCourseIdValid(int courseId) {
+        String courseCheckSql = "SELECT COUNT(*) FROM tbl_courses WHERE c_id = ?";
+        int count = (int) conf.getSingleValue(courseCheckSql, courseId);
         return count > 0;
     }
 }
