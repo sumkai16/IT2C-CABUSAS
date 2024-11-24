@@ -60,8 +60,8 @@ public class main {
                     teach.teachers();
                     break;
                 case 4:
-                    ad.viewGradesMenu();
-                    
+                    c.viewCourses();
+                    gc.Grades();
                     break;
                 case 5:
                     System.out.println("Exiting...");

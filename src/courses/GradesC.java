@@ -13,6 +13,4 @@ public class GradesC {
                         in.nextLine(); // Clear buffer
                         ad.viewCourseGrades(courseIdForGrades);
     }
-    
-    
 }
