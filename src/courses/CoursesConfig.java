@@ -360,7 +360,7 @@ public class CoursesConfig {
 
             System.out.println("Course deleted successfully.");
         } catch (InputMismatchException | NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a valid number.");
+            System.out.println("Invalid input, Please enter a valid number.");
             in.nextLine(); // Clear buffer
         }
     }
