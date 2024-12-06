@@ -33,11 +33,11 @@ public class StudentMain {
                     demo.wantUpdate();
                     break;
                 case 3: 
-                    demo.viewStudents();
+                    demo.viewStudentss();
                     demo.updateStudents();
                     break;
                 case 4:
-                    demo.viewStudents();
+                    demo.viewStudentss();
                     demo.deleteStudents();
                     break;
                 case 5:

@@ -3,9 +3,9 @@ package system;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.*;
 public class config {
-
+    Scanner in = new Scanner(System.in);
     // Connection Method to SQLite
     public static Connection connectDB() {
         try {
@@ -186,4 +186,51 @@ public class config {
 
         return studentIds;
     }
+    
+    public void viewFilteredRecords(String query, String[] headers, String[] columns, Object... filterValues) {
+        if (headers.length != columns.length) {
+            System.out.println("Error: Mismatch between column headers and column names.");
+            return;
+        }
+
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            // Set multiple parameters for PreparedStatement
+            setPreparedStatementValues(pstmt, filterValues);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                // Print headers
+                printTableHeaders(headers);
+
+                // Print rows
+                while (rs.next()) {
+                    printTableRow(rs, columns);
+                }
+                System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error viewing records: " + e.getMessage());
+        }
+    }
+    private String validateInput(String message, String pattern, String errorMessage) {
+        String input;
+        while (true) {
+            System.out.print(message + "(or type 'cancel' to stop): ");
+            input = in.nextLine().trim();
+            if (input.equalsIgnoreCase("cancel")) {
+                System.out.println("Operation canceled by user.");
+                return null; // Signal cancellation to the caller
+            }
+            if (input.matches(pattern)) {
+                break;
+            } else {
+                System.out.println(errorMessage);
+            }
+        }
+        return input;
+    }
+
+
 }

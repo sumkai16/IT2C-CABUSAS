@@ -48,7 +48,7 @@ public class CoursesMain {
                     course.addCourses();
                     break;
                 case 2:
-                    st.viewStudents();
+                    st.viewStudentss();
                     en.enrollStudentInCourses();
                     break;
                 case 3:

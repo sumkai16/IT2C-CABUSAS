@@ -15,16 +15,32 @@ public class CoursesConfig {
     TeacherConfig teach = new TeacherConfig();
 
     public void addCourses() {
-        System.out.print("Course Code: ");
+        System.out.print("Course Code (ALL CAPS) or 'x' to cancel: ");
         String code = in.nextLine().trim();
+
+        if (code.equalsIgnoreCase("x")) {
+            System.out.println("Operation cancelled.");
+            return;
+        }
 
         if (code.isEmpty()) {
             System.out.println("Course Code cannot be empty.");
             return;
         }
 
-        System.out.print("Course Description: ");
+        // Check for duplicate course code
+        if (isCourseCodeExists(code)) {
+            System.out.println("Course Code already exists. Please enter a different code.");
+            return;
+        }
+
+        System.out.print("Course Description or 'x' to cancel: ");
         String desc = in.nextLine().trim();
+
+        if (desc.equalsIgnoreCase("x")) {
+            System.out.println("Operation cancelled.");
+            return;
+        }
 
         if (desc.isEmpty()) {
             System.out.println("Course Description cannot be empty.");
@@ -37,18 +53,30 @@ public class CoursesConfig {
         }
 
         try {
-            System.out.print("Teacher ID to assign: ");
-            int teacherId = in.nextInt();
-            in.nextLine(); // Clear buffer
+            System.out.print("Teacher ID to assign or 'x' to cancel: ");
+            String teacherInput = in.nextLine().trim();
+
+            if (teacherInput.equalsIgnoreCase("x")) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
+
+            int teacherId = Integer.parseInt(teacherInput);
 
             if (!isTeacherIdValid(teacherId)) {
                 System.out.println("Teacher ID does not exist.");
                 return;
             }
 
-            System.out.print("Course Credits: ");
-            int credits = in.nextInt();
-            in.nextLine(); // Clear buffer
+            System.out.print("Course Credits or 'x' to cancel: ");
+            String creditsInput = in.nextLine().trim();
+
+            if (creditsInput.equalsIgnoreCase("x")) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
+
+            int credits = Integer.parseInt(creditsInput);
 
             if (credits < 1 || credits > 10) {
                 System.out.println("Course Credits must be between 1 and 10.");
@@ -59,11 +87,19 @@ public class CoursesConfig {
             conf.addRecord(sql, code, desc, teacherId, credits);
 
             System.out.println("Course added successfully.");
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NumberFormatException e) {
             System.out.println("Invalid input. Please enter a valid number.");
             in.nextLine(); // Clear buffer
         }
     }
+
+    // Method to check if a course code already exists in the database
+    private boolean isCourseCodeExists(String courseCode) {
+        String query = "SELECT COUNT(*) FROM tbl_courses WHERE c_code = ?";
+        int count = (int) conf.getSingleValue(query, courseCode);
+        return count > 0;
+    }
+
 
     public void viewCourses() {
         String coursesQuery = "SELECT c.c_id, c.c_code, (t.t_fname || ' ' || t.t_lname) AS teacher_full_name, "
@@ -130,7 +166,7 @@ public class CoursesConfig {
     // Method to return a query string based on the sorting option
     private String getSortedGradesQuery(int courseId, int sortOption) {
         // Base query to retrieve grades with LEFT JOIN to include all enrolled students
-        String baseQuery = "SELECT s.s_id AS student_id, (s.s_fname || ' ' || s.s_lname) AS student_name, "
+        String baseQuery = "SELECT s.s_id AS student_id, (s.s_lname || ' ' || s.s_fname) AS student_name, "
                          + "g.g_prelim AS prelim, g.g_midterm AS midterm, g.g_prefinal AS prefinal, g.g_finals AS finals "
                          + "FROM tbl_students s "
                          + "INNER JOIN tbl_student_courses sc ON s.s_id = sc.student_id "
@@ -147,7 +183,7 @@ public class CoursesConfig {
                 baseQuery += "ORDER BY s.s_lname";  // Sort by Last Name
                 break;
             case 3:
-                baseQuery += "ORDER BY g.g_finals DESC";  // Sort by Highest Final Grade (descending)
+                baseQuery += "ORDER BY g.g_finals ASC";  // Sort by Highest Final Grade (descending)
                 break;
             default:
                 // No sorting if the option is invalid
@@ -212,14 +248,26 @@ public class CoursesConfig {
 
     public void updateCourses() {
         try {
-            System.out.print("Enter Course ID to update: ");
-            int courseId = in.nextInt();
-            in.nextLine(); // Clear buffer
+            System.out.print("Enter Course ID to update or 'x' to cancel: ");
+            String courseIdInput = in.nextLine().trim();
+
+            if (courseIdInput.equalsIgnoreCase("x")) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
+
+            int courseId = Integer.parseInt(courseIdInput);
 
             System.out.println("1. Update Course Code\n2. Update Course Description\n3. Update Course Credits\n4. Update Teacher Assigned");
-            System.out.print("Enter Action (1-4): ");
-            int action = in.nextInt();
-            in.nextLine(); // Clear buffer
+            System.out.print("Enter Action (1-4) or 'x' to cancel: ");
+            String actionInput = in.nextLine().trim();
+
+            if (actionInput.equalsIgnoreCase("x")) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
+
+            int action = Integer.parseInt(actionInput);
 
             while (action < 1 || action > 4) {
                 System.out.print("Invalid choice. Enter Action (1-4): ");
@@ -232,19 +280,31 @@ public class CoursesConfig {
 
             switch (action) {
                 case 1:
-                    System.out.print("Enter New Course Code: ");
+                    System.out.print("Enter New Course Code or 'x' to cancel: ");
                     newValue = in.nextLine().trim();
+                    if (newValue.equals("x") ||newValue.equals("X")) {
+                        System.out.println("Operation cancelled.");
+                        return;
+                    }
                     sqlUpdate = "UPDATE tbl_courses SET c_code = ? WHERE c_id = ?";
                     break;
                 case 2:
-                    System.out.print("Enter New Course Description: ");
+                    System.out.print("Enter New Course Description or 'x' to cancel: ");
                     newValue = in.nextLine().trim();
+                    if (newValue.equals("x") ||newValue.equals("X")) {
+                        System.out.println("Operation cancelled.");
+                        return;
+                    }
                     sqlUpdate = "UPDATE tbl_courses SET c_description = ? WHERE c_id = ?";
                     break;
                 case 3:
-                    System.out.print("Enter New Course Credits: ");
-                    newValue = in.nextInt();
-                    in.nextLine(); // Clear buffer
+                    System.out.print("Enter New Course Credits or 'x' to cancel: ");
+                    String creditsInput = in.nextLine().trim();
+                    if (creditsInput.equalsIgnoreCase("x")) {
+                        System.out.println("Operation cancelled.");
+                        return;
+                    }
+                    newValue = Integer.parseInt(creditsInput);
                     sqlUpdate = "UPDATE tbl_courses SET c_credits = ? WHERE c_id = ?";
                     break;
                 case 4:
@@ -254,9 +314,14 @@ public class CoursesConfig {
                         return;
                     }
 
-                    System.out.print("Enter New Teacher ID to assign: ");
-                    int newTeacherId = in.nextInt();
-                    in.nextLine(); // Clear buffer
+                    System.out.print("Enter New Teacher ID to assign or 'x' to cancel: ");
+                    String teacherInput = in.nextLine().trim();
+                    if (teacherInput.equalsIgnoreCase("x")) {
+                        System.out.println("Operation cancelled.");
+                        return;
+                    }
+
+                    int newTeacherId = Integer.parseInt(teacherInput);
 
                     // Check if the new teacher ID is valid
                     if (!isTeacherIdValid(newTeacherId)) {
@@ -270,28 +335,36 @@ public class CoursesConfig {
 
             conf.updateRecord(sqlUpdate, newValue, courseId);
             System.out.println("Course updated successfully.");
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NumberFormatException e) {
             System.out.println("Invalid input. Please enter a valid number.");
             in.nextLine(); // Clear buffer
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
-
     public void deleteCourses() {
         try {
-            System.out.print("Enter Course ID to delete: ");
-            int courseId = in.nextInt();
-            in.nextLine(); // Clear buffer
+            System.out.print("Enter Course ID to delete or 'x' to cancel: ");
+            String courseIdInput = in.nextLine().trim();
+
+            if (courseIdInput.equalsIgnoreCase("x")) {
+                System.out.println("Operation cancelled.");
+                return;
+            }
+
+            int courseId = Integer.parseInt(courseIdInput);
 
             String sqlDelete = "DELETE FROM tbl_courses WHERE c_id = ?";
             conf.deleteRecord(sqlDelete, courseId);
 
             System.out.println("Course deleted successfully.");
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NumberFormatException e) {
             System.out.println("Invalid input. Please enter a valid number.");
             in.nextLine(); // Clear buffer
         }
     }
+
 
     private boolean checkAvailableTeachers() {
         String checkSql = "SELECT COUNT(*) FROM tbl_teachers";
